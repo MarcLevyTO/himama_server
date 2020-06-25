@@ -35,7 +35,12 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    @user.destroy
+    @user.status = "Inactive"
+    if @user.save
+      render json: @user, status: :ok, location: @user
+    else
+      render json: @user.errors, status: :unprocessable_entity
+    end
   end
 
   private
@@ -46,6 +51,6 @@ class UsersController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def user_params
-      params.fetch(:user, {})
+      params.require(:user).permit(:username, :status)
     end
 end
