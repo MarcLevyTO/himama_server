@@ -7,10 +7,8 @@ class EventsController < ApplicationController
     if !params[:username].nil?
       user = User.find_by username: params[:username]
       render json: { error: "User not found" }, status: :not_found and return if user.nil?
-
-      @events = Event.where(["user_id=?", user.id]).limit(10)
+      @events = Event.where(["user_id=?", user.id]).order("created_at desc").limit(100)
       render json: @events
-
     else
       @events = Event.all
       render json: @events
@@ -52,23 +50,21 @@ class EventsController < ApplicationController
       end
       render json: @event, status: :created, location: @event
     else
-      render json: @event.errors, status: :unprocessable_entity
+      render json: @event.errors, status: :internal_server_error
     end
 
   end
 
   # PATCH/PUT /events/1
   def update
-    if @event.update(event_params)
-      render json: @event
-    else
-      render json: @event.errors, status: :unprocessable_entity
-    end
+    # Should not be able to update an event
+    render json: { error: "Function not allowed" }, status: :method_not_allowed
   end
 
   # DELETE /events/1
   def destroy
-    @event.destroy
+    # Should not be able to destroy an event
+    render json: { error: "Function not allowed" }, status: :method_not_allowed
   end
 
   private
