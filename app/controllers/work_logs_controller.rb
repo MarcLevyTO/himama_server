@@ -26,7 +26,7 @@ class WorkLogsController < ApplicationController
     render json: { error: "Function not allowed" }, status: :method_not_allowed
   end
 
-  # PATCH/PUT /work_logs/1
+  # PUT /work_logs/1
   def update
     old_start_time_event = Event.find(@work_log.start_event_id)
     old_end_time_event = Event.find(@work_log.end_event_id)
