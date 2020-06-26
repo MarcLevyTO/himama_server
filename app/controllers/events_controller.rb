@@ -31,10 +31,10 @@ class EventsController < ApplicationController
 
     if event_type == "clock"
       last_event = Event.where(["user_id=?", user.id]).last
-      if last_event.nil? || last_event.event_type == "Clock Out"
-        type = "Clock In"
-      else
+      if !last_event.nil? && last_event.event_type == "Clock In"
         type = "Clock Out"
+      else
+        type = "Clock In"
       end
       @event = Event.new(user_id: user.id, event_type: type, data: current_time.to_s, data_type: "DateTime")
     else
@@ -46,8 +46,6 @@ class EventsController < ApplicationController
         start_time = DateTime.parse(last_event.data)
         time_worked = ((current_time - start_time) * 24 * 60 * 60).to_i
         WorkLog.create!(user_id: user.id, start_time: start_time, end_time: current_time, time_worked: time_worked, start_event_id: last_event.id, end_event_id: @event.id)
-      end
-      if type === "Clock Out"
         render json: { event: @event, time_worked: time_worked }, status: :created, location: @event
       else
         render json: { event: @event }, status: :created, location: @event

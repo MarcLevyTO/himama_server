@@ -15,7 +15,7 @@ class UsersController < ApplicationController
 
   # POST /users
   def create
-    @user = User.new(user_params)
+    @user = User.new(username: user_params["username"].downcase)
 
     if @user.save
       Event.create!(user_id: @user.id, event_type: 'User Created', data: @user.username, data_type: "String")
