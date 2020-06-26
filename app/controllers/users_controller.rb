@@ -18,6 +18,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
+      Event.create!(user_id: @user.id, event_type: 'User Created', data: @user.username, data_type: "String")
       render json: @user, status: :created, location: @user
     else
       render json: @user.errors, status: :unprocessable_entity

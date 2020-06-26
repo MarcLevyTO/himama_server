@@ -10,7 +10,7 @@ class EventsController < ApplicationController
       @events = Event.where(["user_id=?", user.id]).order("created_at desc").limit(100)
       render json: @events
     else
-      @events = Event.all
+      @events = Event.all.order("created_at desc").limit(100)
       render json: @events
     end
   end
@@ -35,7 +35,6 @@ class EventsController < ApplicationController
         type = "Clock In"
       else
         type = "Clock Out"
-        
       end
       @event = Event.new(user_id: user.id, event_type: type, data: current_time.to_s, data_type: "DateTime")
     else
@@ -48,9 +47,13 @@ class EventsController < ApplicationController
         time_worked = ((current_time - start_time) * 24 * 60 * 60).to_i
         WorkLog.create!(user_id: user.id, start_time: start_time, end_time: current_time, time_worked: time_worked, start_event_id: last_event.id, end_event_id: @event.id)
       end
-      render json: @event, status: :created, location: @event
+      if type === "Clock Out"
+        render json: { event: @event, time_worked: time_worked }, status: :created, location: @event
+      else
+        render json: { event: @event }, status: :created, location: @event
+      end
     else
-      render json: @event.errors, status: :internal_server_error
+      render json: { error: @event.errors }, status: :internal_server_error
     end
 
   end

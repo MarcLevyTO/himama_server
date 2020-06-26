@@ -10,7 +10,7 @@ class WorkLogsController < ApplicationController
       @work_logs = WorkLog.where(["user_id=?", user.id]).order("created_at desc").limit(100)
       render json: @work_logs
     else
-      @work_logs = WorkLog.all
+      @work_logs = WorkLog.all.order("created_at desc").limit(100)
       render json: @work_logs
     end
   end
