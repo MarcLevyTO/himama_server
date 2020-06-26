@@ -50,9 +50,9 @@ WORK LOGS
 
 ## Future Considerations
 
-- Make the POST /events call a JWT protected call. Meaning a user must be logged in to make this call. Otherwise, anyone can clock in given a username.
 - Add Testing. Add unit tests. Add integration tests. Add regression tests. Add acceptance tests.
 - Build on the User model. Add password, JWT token, for login and verification. Add role, Admin vs Teacher vs (other?).
 - Put in AUTHENTICATION endpoints to handle logging in.
+- Make the POST /events call a JWT protected call. Meaning a user must be logged in to make this call. Otherwise, anyone can clock in given a username.
 - Make the end points dependent on login. So make some endpoints public, other private, others private based on User privileges.
 - Put in more potential error handling on the clock in/out endpoint. To prevent spamming of the button. Maybe make use of a locking mechanism or check.
